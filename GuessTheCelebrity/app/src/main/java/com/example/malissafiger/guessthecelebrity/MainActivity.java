@@ -23,7 +23,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.util.regex.Pattern.*;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> celeburls = new ArrayList<String>();
@@ -31,13 +30,13 @@ public class MainActivity extends AppCompatActivity {
     int chosenceleb= 0;
     int locationofcorrectanswer = 0;
     String [] answers= new String[4];
+
+    ImageView imageView;
     Button button0;
     Button button1;
     Button button2;
     Button button3;
 
-
-    ImageView imageView;
 
     public void celebChosen(View view)
     {
@@ -58,14 +57,19 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                 URL url= new URL(urls[0]);
+
                 HttpURLConnection connection= (HttpURLConnection)url.openConnection();
+
                 connection.connect();
+
                 InputStream inputStream= connection.getInputStream();
+
                 Bitmap mybitmap = BitmapFactory.decodeStream(inputStream);
+
                 return  mybitmap;
             }
             catch (MalformedURLException e) {
-
+                e.printStackTrace();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -122,8 +126,10 @@ public class MainActivity extends AppCompatActivity {
         DownloadTask task= new DownloadTask();
         String result =null;
         try {
+
             result=task.execute("http://www.posh24.se/kandisar").get();
-            String [] splitResult  = result.split(" <div class=\"sidebarContainer\"> ");
+
+            String[] splitResult = result.split("<div class=\"sidebarContainer\">");
 
             Pattern p= Pattern.compile("<img src=\"(.*?)\"");
             Matcher m= p.matcher(splitResult[0]);
